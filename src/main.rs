@@ -27,13 +27,13 @@ impl CursorType for MockCursor {
     }
 }
 
-struct Context<Cursor: CursorType> {
+struct Owner<Cursor: CursorType> {
     cursor: Cursor,
 }
 
-impl<C: CursorType> Context<C> {
-    pub fn new(cursor: C) -> Context<C>  {
-        Context {
+impl<C: CursorType> Owner<C> {
+    pub fn new(cursor: C) -> Owner<C>  {
+        Owner {
             cursor: cursor,
         }
     }
@@ -51,21 +51,21 @@ impl<C: CursorType> Context<C> {
 
 fn main() {
     let cursor = Cursor::new();
-    let context = Context::new(cursor);
-    context.do_something();
+    let owner = Owner::new(cursor);
+    owner.do_something();
 }
 
 #[test]
 fn test_mock() {
     let cursor = MockCursor::new();
-    let context = Context::new(cursor);
-    context.do_something();
+    let owner = Owner::new(cursor);
+    owner.do_something();
 }
 
 #[test]
 #[should_panic]
 fn test_real() {
     let cursor = Cursor::new();
-    let context = Context::new(cursor);
-    context.do_something();
+    let owner = Owner::new(cursor);
+    owner.do_something();
 }
